@@ -14,19 +14,59 @@
 
 ---
 
-## 二、项目目录说明（简要）
+## 二、项目目录说明
 
 ```
-.
-├── kernel/          # 内核源码
-│   ├── start.c      # 内核入口与实验选择
-│   ├── trap/        # 中断与异常处理
-│   ├── proc/        # 进程与调度器
-│   ├── fs/          # 文件系统实现
-│   ├── mm/          # 内存管理
-│   └── ...
-├── Makefile
-└── README.md
+├── include               # 头文件目录，存放全局宏、结构体和函数声明
+│   ├── assert.h          # 断言宏，用于调试
+│   ├── def.h             # 系统全局常量、类型定义
+│   ├── memlayout.h       # 内存布局相关宏与结构
+│   ├── riscv.h           # RISC-V 架构相关定义
+│   ├── syscall.h         # 系统调用编号与接口声明
+│   └── virtio.h          # VirtIO 虚拟磁盘驱动相关结构与函数
+├── kernel                # 内核源代码目录
+│   ├── boot              # 启动相关代码
+│   │   ├── entry.S       # 启动汇编入口
+│   │   ├── sbi.c         # 与 RISC-V SBI (Supervisor Binary Interface) 交互
+│   │   └── start.c       # 内核初始化入口
+│   ├── fs                # 文件系统相关
+│   │   ├── bio.c         # 块缓存管理
+│   │   ├── file.c        # 文件操作接口实现
+│   │   ├── fs.c          # 文件系统核心功能（inode、目录等）
+│   │   ├── log.c         # 写前日志（WAL）实现
+│   │   ├── sysfile.c     # 文件系统系统调用接口
+│   │   └── virtio_disk.c # VirtIO 磁盘读写接口
+│   ├── lib               # 内核库函数
+│   │   ├── console.c     # 控制台输入输出
+│   │   ├── printf.c      # 格式化打印实现
+│   │   ├── snprintf.c    # 字符串格式化函数
+│   │   ├── string.c      # 基本字符串操作函数
+│   │   └── uart.c        # UART 驱动
+│   ├── mm                # 内存管理
+│   │   ├── kalloc.c      # 内核页分配器
+│   │   └── vm.c          # 虚拟内存与页表管理
+│   ├── net               # 网络模块（简化或未实现）
+│   ├── proc              # 进程管理
+│   │   ├── proc.c        # 进程核心调度与管理
+│   │   ├── swtch.S       # 上下文切换汇编实现
+│   │   ├── swtest.c      # 上下文切换测试
+│   │   └── sysproc.c     # 进程相关系统调用接口
+│   ├── sync              # 同步原语
+│   │   ├── sleeplock.c   # 睡眠锁实现
+│   │   └── spinlock.c    # 自旋锁实现
+│   └── trap              # 异常与中断处理
+│       ├── kernelvec.S   # 内核异常向量
+│       ├── trampoline.S  # 用户态与内核态切换 trampolines
+│       └── trap.c        # 中断/异常处理逻辑
+├── Makefile              # 编译规则
+├── mkfs                  # 文件系统镜像生成工具
+│   ├── mkfs              # 可执行文件
+│   └── mkfs.c            # 源代码实现
+├── readme.md             # 项目说明文档
+└── scripts               # 构建与辅助脚本
+    ├── kernel.ld         # 内核链接脚本
+    ├── usys.pl           # 系统调用生成脚本
+    └── usys.S            # 系统调用汇编接口
 ```
 
 ---
